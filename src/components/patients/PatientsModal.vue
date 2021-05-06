@@ -1,110 +1,62 @@
 <template>
   <div>
-    <h3>{{ mainTitle }}</h3>
+    <transition name="model">
+      <div class="modal-mask">
+        <div class="modal-wrapper">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h4 class="modal-title">{{ dynamicTitle }}</h4>
+                <button type="button" class="close" @click="myModel = false">
+                  <span>x</span>
+                </button>
+              </div>
+              <div class="modal-body flex">
+                <input
+                  type="text"
+                  placeholder="Nome"
+                  v-model="newPatient.name"
+                />
 
-    <div>
-      <table class="table">
-        <thead class="table-dark">
-          <tr>
-            <th>Nome</th>
-            <th>Data de Nascimento</th>
-            <th>Email</th>
-            <th>Cpf</th>
-            <th>
-              <input
-                type="button"
-                class="btn btn-succes btn-xs test"
-                @click="openModal"
-                value="Add"
-              />
-            </th>
-          </tr>
-        </thead>
+                <input
+                  type="date"
+                  placeholder="Data de nascimento"
+                  v-model="newPatient.date"
+                />
 
-        <tbody>
-          <tr style="color: tomato" v-show="!patients.length">
-            Não tem pacientes cadastrados
-          </tr>
-          <tr v-bind:key="t" v-for="(t, i) in patients">
-            <td>{{ t.name }}</td>
-            <td>{{ t.date }}</td>
-            <td>{{ t.cpf }}</td>
-            <td>{{ t.email }}</td>
-            <td>
-              <button @click="removePatient(i)">x</button>
-              <button @click="openModal">Editar</button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-      <div v-if="myModel">
-        <transition name="model">
-          <div class="modal-mask">
-            <div class="modal-wrapper">
-              <div class="modal-dialog">
-                <div class="modal-content">
-                  <div class="modal-header">
-                    <h4 class="modal-title">{{ dynamicTitle }}</h4>
-                    <button
-                      type="button"
-                      class="close"
-                      @click="myModel = false"
-                    >
-                      <span>x</span>
-                    </button>
-                  </div>
-                  <div class="modal-body flex">
-                    <input
-                      type="text"
-                      placeholder="Nome"
-                      v-model="newPatient.name"
-                    />
+                <input type="text" placeholder="CPF" v-model="newPatient.cpf" />
 
-                    <input
-                      type="date"
-                      placeholder="Data de nascimento"
-                      v-model="newPatient.date"
-                    />
+                <input
+                  type="email"
+                  placeholder="E-mail"
+                  v-model="newPatient.email"
+                />
 
-                    <input
-                      type="text"
-                      placeholder="CPF"
-                      v-model="newPatient.cpf"
-                    />
-
-                    <input
-                      type="email"
-                      placeholder="E-mail"
-                      v-model="newPatient.email"
-                    />
-
-                    <br />
-                    <div align="center">
-                      <input type="hidden" v-model="hiddenId" />
-                      <input
-                        type="button"
-                        class="btn btn-success btn-xs"
-                        v-model="actionButton"
-                        @click="addPatient"
-                      />
-                      <button @click="cancel">Cancelar</button>
-                    </div>
-                  </div>
+                <br />
+                <div align="center">
+                  <input type="hidden" />
+                  <input
+                    type="button"
+                    class="btn btn-success btn-xs"
+                    v-model="actionButton"
+                    @click="addPatient"
+                  />
+                  <button @click="cancel">Cancelar</button>
                 </div>
               </div>
             </div>
           </div>
-        </transition>
+        </div>
       </div>
-    </div>
+    </transition>
   </div>
 </template>
 
 <script>
 export default {
+  name: 'PatiensModal',
   data() {
     return {
-      mainTitle: 'Lista de Pacientes',
       patients: [],
 
       newPatient: {
@@ -115,8 +67,8 @@ export default {
       },
 
       myModel: false,
-      actionButton: '',
-      dynamicTitle: ''
+      actionButton: 'Adicionar',
+      dynamicTitle: 'Adicionar novo paciente'
     };
   },
 
@@ -125,11 +77,6 @@ export default {
   },
 
   methods: {
-    openModal() {
-      this.actionButton = 'Adicionar';
-      this.dynamicTitle = 'Adicionar novo paciente';
-      this.myModel = true;
-    },
     addPatient() {
       if (
         !this.newPatient.name ||
@@ -142,7 +89,7 @@ export default {
 
       this.patients.push({
         name: this.newPatient.name,
-        age: this.newPatient.date,
+        date: this.newPatient.date,
         cpf: this.newPatient.cpf,
         email: this.newPatient.email
       });
@@ -150,19 +97,14 @@ export default {
       localStorage.setItem('patients', JSON.stringify(this.patients));
 
       this.newPatient.name = '';
-      this.newPatient.date = 0;
+      this.newPatient.date = '';
       this.newPatient.cpf = '';
       this.newPatient.email = '';
     },
 
-    removePatient(index) {
-      this.patients.splice(index, 1);
-      localStorage.setItem('patients', JSON.stringify(this.patients));
-    },
-
     cancel() {
       this.newPatient.name = '';
-      this.newPatient.date = 0;
+      this.newPatient.date = '';
       this.newPatient.cpf = '';
       this.newPatient.email = '';
     }
@@ -187,10 +129,6 @@ export default {
 .modal-wrapper {
   display: table-cell;
   vertical-align: middle;
-}
-
-.test {
-  color: #fff;
 }
 
 .flex {

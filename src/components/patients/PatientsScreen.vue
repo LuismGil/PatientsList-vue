@@ -1,15 +1,20 @@
 <template>
   <div>
-    <PatientsModal />
+    <h3>{{ mainTitle }}</h3>
+    <PatientsTable />
   </div>
 </template>
 
 <script>
-import PatientsModal from './PatientsModal';
+import PatientsTable from './PatientsTable.vue';
 export default {
-  name: 'PatientScreen',
+  data() {
+    return {
+      mainTitle: 'Lista de Pacientes'
+    };
+  },
   components: {
-    PatientsModal
+    PatientsTable
   }
 };
 </script>
