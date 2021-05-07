@@ -5,13 +5,13 @@
 </template>
 
 <script>
-import PatientsScreen from './components/patients/PatientsScreen';
+import PatientsScreen from './components/patients/PatientsScreen.vue';
 
 export default {
   name: 'App',
   components: {
-    PatientsScreen
-  }
+    PatientsScreen,
+  },
 };
 </script>
 

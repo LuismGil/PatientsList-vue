@@ -6,42 +6,54 @@
           <div class="modal-dialog">
             <div class="modal-content">
               <div class="modal-header">
-                <h4 class="modal-title">{{ dynamicTitle }}</h4>
-                <button type="button" class="close" @click="myModel = false">
+                <h4 class="modal-title">
+                  {{ dynamicTitle }}
+                </h4>
+                <button
+                  type="button"
+                  class="close"
+                  @click="close"
+                >
                   <span>x</span>
                 </button>
               </div>
               <div class="modal-body flex">
                 <input
+                  v-model="newPatient.name"
                   type="text"
                   placeholder="Nome"
-                  v-model="newPatient.name"
-                />
+                >
 
                 <input
+                  v-model="newPatient.date"
                   type="date"
                   placeholder="Data de nascimento"
-                  v-model="newPatient.date"
-                />
-
-                <input type="text" placeholder="CPF" v-model="newPatient.cpf" />
+                >
 
                 <input
+                  v-model="newPatient.cpf"
+                  type="text"
+                  placeholder="CPF"
+                >
+
+                <input
+                  v-model="newPatient.email"
                   type="email"
                   placeholder="E-mail"
-                  v-model="newPatient.email"
-                />
+                >
 
-                <br />
+                <br>
                 <div align="center">
-                  <input type="hidden" />
+                  <input type="hidden">
                   <input
+                    v-model="actionButton"
                     type="button"
                     class="btn btn-success btn-xs"
-                    v-model="actionButton"
                     @click="addPatient"
-                  />
-                  <button @click="cancel">Cancelar</button>
+                  >
+                  <button @click="cancel">
+                    Cancelar
+                  </button>
                 </div>
               </div>
             </div>
@@ -63,12 +75,12 @@ export default {
         name: '',
         date: '',
         cpf: '',
-        email: ''
+        email: '',
       },
 
-      myModel: false,
+      myModal: false,
       actionButton: 'Adicionar',
-      dynamicTitle: 'Adicionar novo paciente'
+      dynamicTitle: 'Adicionar novo paciente',
     };
   },
 
@@ -77,12 +89,15 @@ export default {
   },
 
   methods: {
+    close() {
+      this.$emit('closex');
+    },
     addPatient() {
       if (
-        !this.newPatient.name ||
-        !this.newPatient.date ||
-        !this.newPatient.cpf ||
-        !this.newPatient.email
+        !this.newPatient.name
+        || !this.newPatient.date
+        || !this.newPatient.cpf
+        || !this.newPatient.email
       ) {
         return;
       }
@@ -91,7 +106,7 @@ export default {
         name: this.newPatient.name,
         date: this.newPatient.date,
         cpf: this.newPatient.cpf,
-        email: this.newPatient.email
+        email: this.newPatient.email,
       });
 
       localStorage.setItem('patients', JSON.stringify(this.patients));
@@ -107,8 +122,8 @@ export default {
       this.newPatient.date = '';
       this.newPatient.cpf = '';
       this.newPatient.email = '';
-    }
-  }
+    },
+  },
 };
 </script>
 

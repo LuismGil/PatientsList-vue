@@ -7,15 +7,17 @@
 
 <script>
 import PatientsTable from './PatientsTable.vue';
+
 export default {
+  name: 'PatientsScreen',
+  components: {
+    PatientsTable,
+  },
   data() {
     return {
-      mainTitle: 'Lista de Pacientes'
+      mainTitle: 'Lista de Pacientes',
     };
   },
-  components: {
-    PatientsTable
-  }
 };
 </script>
 
