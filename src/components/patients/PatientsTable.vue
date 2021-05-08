@@ -5,13 +5,13 @@
         <tr>
           <th>Nome</th>
           <th>Data de Nascimento</th>
+          <th>CPF</th>
           <th>Email</th>
-          <th>Cpf</th>
           <th>
             <input
               type="button"
               class="btn btn-succes btn-xs test"
-              value="Add"
+              value="+ Adicionar Paciente"
               @click="openModal"
             >
           </th>
@@ -37,7 +37,7 @@
             <button @click="removePatient(i)">
               x
             </button>
-            <button @click="openModal">
+            <button @click="editModal(t)">
               Editar
             </button>
           </td>
@@ -47,6 +47,9 @@
 
     <PatientsModal
       v-show="myModal"
+      :selected-patient="selectedPatient"
+      :action-button="actionButton"
+      :dynamic-title="dynamicTitle"
       @closex="closeMyModal"
     />
   </div>
@@ -68,7 +71,10 @@ export default {
         cpf: '',
         email: '',
       },
+      selectedPatient: {},
 
+      actionButton: '',
+      dynamicTitle: '',
       myModal: false,
     };
   },
@@ -80,9 +86,16 @@ export default {
   methods: {
     openModal() {
       this.myModal = true;
+      this.actionButton = 'Adicionar';
+      this.dynamicTitle = 'Adicionar novo paciente';
     },
     closeMyModal() {
+      this.selectedPatient = {};
       this.myModal = false;
+    },
+    editModal(t) {
+      this.selectedPatient = t;
+      this.myModal = true;
     },
 
     removePatient(index) {

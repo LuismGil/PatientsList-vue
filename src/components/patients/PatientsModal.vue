@@ -45,12 +45,14 @@
                 <br>
                 <div align="center">
                   <input type="hidden">
+
                   <input
                     v-model="actionButton"
                     type="button"
                     class="btn btn-success btn-xs"
-                    @click="addPatient"
+                    @click="selectedPatient ? updatePatient() : addPatient()"
                   >
+
                   <button @click="cancel">
                     Cancelar
                   </button>
@@ -67,21 +69,34 @@
 <script>
 export default {
   name: 'PatiensModal',
+  props: {
+    selectedPatient: Object,
+    actionButton: String,
+    dynamicTitle: String,
+  },
   data() {
     return {
       patients: [],
-
       newPatient: {
         name: '',
         date: '',
         cpf: '',
         email: '',
       },
-
       myModal: false,
-      actionButton: 'Adicionar',
-      dynamicTitle: 'Adicionar novo paciente',
+      button: true,
     };
+  },
+
+  watch: {
+    selectedPatient(newVal) {
+      this.actionButton = 'Salvar';
+      this.dynamicTitle = 'Editar paciente';
+      this.newPatient.name = newVal.name;
+      this.newPatient.date = newVal.date;
+      this.newPatient.cpf = newVal.cpf;
+      this.newPatient.email = newVal.email;
+    },
   },
 
   created() {
@@ -116,6 +131,14 @@ export default {
       this.newPatient.cpf = '';
       this.newPatient.email = '';
     },
+    updatePatient() {
+      this.patients.push({
+        name: this.newPatient.name,
+        date: this.newPatient.date,
+        cpf: this.newPatient.cpf,
+        email: this.newPatient.email,
+      });
+    },
 
     cancel() {
       this.newPatient.name = '';
@@ -123,6 +146,7 @@ export default {
       this.newPatient.cpf = '';
       this.newPatient.email = '';
     },
+
   },
 };
 </script>
