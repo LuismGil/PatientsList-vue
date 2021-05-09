@@ -121,6 +121,7 @@ export default {
     removePatient(index) {
       this.patients.splice(index, 1);
       localStorage.setItem('patients', JSON.stringify(this.patients));
+      window.location.reload();
     },
     moment() {
       return moment();

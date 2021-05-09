@@ -6,12 +6,8 @@
           <div class="modal-dialog">
             <div class="modal-content">
               <div class="modal-header">
-                <h4
-                  class="modal-title"
-                >
-                  {{
-                    dynamicTitle
-                  }}
+                <h4 class="modal-title">
+                  {{ dynamicTitle }}
                 </h4>
 
                 <button
@@ -23,35 +19,77 @@
                 </button>
               </div>
               <div class="modal-body">
-                <form class="modal-input">
-                  <input
-                    v-model="newPatient.name"
-                    type="text"
-                    placeholder="Nome"
-                    required
-                  >
+                <form
+                  class="modal-input"
+                >
+                  <div class="form-group m-2">
+                    <label for="name">Nome</label>
+                    <input
+                      v-model="newPatient.name"
+                      name="name"
+                      class="form-control"
+                      type="text"
+                      :class="{ 'is-invalid': submitted && $v.newPatient.name.$error }"
+                    >
+                    <div
+                      v-if="submitted && !$v.newPatient.name.required"
+                      class="invalid-feedback"
+                    >
+                      O nome é obrigatório
+                    </div>
+                  </div>
 
-                  <input
-                    v-model="newPatient.date"
-                    type="date"
-                    placeholder="Data de nascimento"
-                    required
-                  >
-
-                  <input
-                    id="cpf-id"
-                    v-model="newPatient.cpf"
-                    type="text"
-                    placeholder="CPF"
-                    required
-                  >
-
-                  <input
-                    v-model="newPatient.email"
-                    type="email"
-                    placeholder="E-mail"
-                    required
-                  >
+                  <div class="form-group m-2">
+                    <label for="date">Data de Nascimento</label>
+                    <input
+                      v-model="newPatient.date"
+                      name="date"
+                      class="form-control"
+                      type="date"
+                      :class="{ 'is-invalid': submitted && $v.newPatient.date.$error }"
+                    >
+                    <div
+                      v-if="submitted && !$v.newPatient.date.required"
+                      class="invalid-feedback"
+                    >
+                      A data é obrigatória
+                    </div>
+                  </div>
+                  <div class="form-group m-2">
+                    <label for="cpf">CPF</label>
+                    <input
+                      id="cpf-id"
+                      v-model="newPatient.cpf"
+                      name="cpf"
+                      class="form-control"
+                      type="text"
+                      :class="{ 'is-invalid': submitted && $v.newPatient.cpf.$error }"
+                    >
+                    <div
+                      v-if="submitted && $v.newPatient.cpf.$error"
+                      class="invalid-feedback"
+                    >
+                      <span v-if="!$v.newPatient.cpf.required">O Cpf é obrigatório</span>
+                      <span v-if="!$v.newPatient.cpf.minLength">O Cpf inserido não é válido</span>
+                    </div>
+                  </div>
+                  <div class="form-group m-2">
+                    <label for="email">E-mail</label>
+                    <input
+                      v-model="newPatient.email"
+                      name="email"
+                      class="form-control"
+                      type="email"
+                      :class="{ 'is-invalid': submitted && $v.newPatient.email.$error }"
+                    >
+                    <div
+                      v-if="submitted && $v.newPatient.email.$error"
+                      class="invalid-feedback"
+                    >
+                      <span v-if="!$v.newPatient.email.required">O Email é obrigatório</span>
+                      <span v-if="!$v.newPatient.email.email">O Email é inválido</span>
+                    </div>
+                  </div>
                 </form>
 
                 <br>
@@ -86,6 +124,7 @@
 
 <script>
 
+import { required, email, minLength } from 'vuelidate/lib/validators';
 // import { FormatCpf } from '../helpers/FormatCpf';
 
 export default {
@@ -101,6 +140,7 @@ export default {
   },
   data() {
     return {
+      errors: [],
 
       patients: [],
       newPatient: {
@@ -112,7 +152,16 @@ export default {
       actionButton: 'Adicionar',
       dynamicTitle: 'Nuevo usuario',
       editPatient: false,
+      submitted: false,
     };
+  },
+  validations: {
+    newPatient: {
+      name: { required },
+      date: { required },
+      cpf: { required, minLength: minLength(11) },
+      email: { required, email },
+    },
   },
 
   watch: {
@@ -143,6 +192,12 @@ export default {
       this.editPatient = false;
     },
     updatePatient() {
+      this.submitted = true;
+      this.$v.$touch();
+      if (this.$v.$invalid) {
+        return;
+      }
+
       if (!this.editPatient) {
         this.patients.push({
           name: this.newPatient.name,
@@ -220,6 +275,10 @@ export default {
 
 .modal-btn {
   margin-bottom: 15px;
+}
+
+div > label {
+  margin-bottom: 5px;
 }
 
 </style>
