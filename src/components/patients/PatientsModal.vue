@@ -6,9 +6,14 @@
           <div class="modal-dialog">
             <div class="modal-content">
               <div class="modal-header">
-                <h4 class="modal-title">
-                  {{ dynamicTitle }}
+                <h4
+                  class="modal-title"
+                >
+                  {{
+                    dynamicTitle
+                  }}
                 </h4>
+
                 <button
                   type="button"
                   class="btn"
@@ -34,6 +39,7 @@
                   >
 
                   <input
+                    id="cpf-id"
                     v-model="newPatient.cpf"
                     type="text"
                     placeholder="CPF"
@@ -59,7 +65,7 @@
                     v-model="actionButton"
                     type="button"
                     class="btn btn-success m-1"
-                    @click="addPatient"
+                    @click="updatePatient"
                   >
 
                   <button
@@ -79,12 +85,19 @@
 </template>
 
 <script>
+
+// import { FormatCpf } from '../helpers/FormatCpf';
+
 export default {
+
   name: 'PatiensModal',
   props: {
-    selectedPatient: Object,
-    actionButton: String,
-    dynamicTitle: String,
+    selectedPatient: {
+      type: Object,
+      default: () => {
+      },
+    },
+
   },
   data() {
     return {
@@ -96,18 +109,25 @@ export default {
         cpf: '',
         email: '',
       },
-      myModal: false,
+      actionButton: 'Adicionar',
+      dynamicTitle: 'Nuevo usuario',
+      editPatient: false,
     };
   },
 
   watch: {
     selectedPatient(newVal) {
-      this.actionButton = 'Salvar';
-      this.dynamicTitle = 'Editar paciente';
-      this.newPatient.name = newVal.name;
-      this.newPatient.date = newVal.date;
-      this.newPatient.cpf = newVal.cpf;
-      this.newPatient.email = newVal.email;
+      if (Object.keys(newVal).length) {
+        this.newPatient.name = newVal.name;
+        this.newPatient.date = newVal.date;
+        this.newPatient.cpf = newVal.cpf;
+        this.newPatient.email = newVal.email;
+
+        this.dynamicTitle = `Editar usuario ${newVal.name}`;
+        this.actionButton = 'Salvar';
+
+        this.editPatient = true;
+      }
     },
   },
 
@@ -118,30 +138,41 @@ export default {
   methods: {
     close() {
       this.$emit('closex');
+      this.dynamicTitle = 'Nuevo usuario';
+      this.actionButton = 'Adicionar';
+      this.editPatient = false;
     },
-    addPatient() {
-      if (
-        !this.newPatient.name
-        || !this.newPatient.date
-        || !this.newPatient.cpf
-        || !this.newPatient.email
-      ) {
-        return;
+    updatePatient() {
+      if (!this.editPatient) {
+        this.patients.push({
+          name: this.newPatient.name,
+          date: this.newPatient.date,
+          cpf: this.newPatient.cpf,
+          email: this.newPatient.email,
+        });
+
+        localStorage.setItem('patients', JSON.stringify(this.patients));
+
+        this.newPatient.name = '';
+        this.newPatient.date = '';
+        this.newPatient.cpf = '';
+        this.newPatient.email = '';
+
+        window.location.reload();
+      } else {
+        const patientIndex = this.patients.findIndex((
+          (patient) => patient.cpf === this.newPatient.cpf
+        ));
+
+        this.patients[patientIndex].name = this.newPatient.name;
+        this.patients[patientIndex].date = this.newPatient.date;
+        this.patients[patientIndex].cpf = this.newPatient.cpf;
+        this.patients[patientIndex].email = this.newPatient.email;
+
+        localStorage.setItem('patients', JSON.stringify(this.patients));
+
+        window.location.reload();
       }
-
-      this.patients.push({
-        name: this.newPatient.name,
-        date: this.newPatient.date,
-        cpf: this.newPatient.cpf,
-        email: this.newPatient.email,
-      });
-
-      localStorage.setItem('patients', JSON.stringify(this.patients));
-
-      this.newPatient.name = '';
-      this.newPatient.date = '';
-      this.newPatient.cpf = '';
-      this.newPatient.email = '';
     },
 
     cancel() {
@@ -150,6 +181,9 @@ export default {
       this.newPatient.cpf = '';
       this.newPatient.email = '';
     },
+    // FmatCpf() {
+    //   return FormatCpf();
+    // },
 
   },
 };
@@ -180,8 +214,8 @@ export default {
 }
 
 .modal-input > input {
-  padding: 10px;
   margin: 10px;
+  padding: 10px;
 }
 
 .modal-btn {

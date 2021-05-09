@@ -29,16 +29,18 @@
         </tr>
         <tr
           v-for="(t, i) in patients"
-          :key="t"
+          :key="t.cpf"
           class="table-tr"
         >
           <td class="p-td">
             {{ t.name }}
           </td>
           <td class="p-td">
-            {{ t.date }}
+            {{ moment(t.date).format('DD-MM-YYYY') }}
           </td>
-          <td class="p-td">
+          <td
+            class="p-td"
+          >
             {{ t.cpf }}
           </td>
           <td class="p-td">
@@ -74,6 +76,7 @@
 
 <script>
 import moment from 'moment';
+
 import PatientsModal from './PatientsModal.vue';
 
 export default {
@@ -90,9 +93,6 @@ export default {
         email: '',
       },
       selectedPatient: {},
-
-      actionButton: '',
-      dynamicTitle: '',
       myModal: false,
     };
   },
@@ -104,14 +104,16 @@ export default {
   methods: {
     openModal() {
       this.myModal = true;
-      this.actionButton = 'Adicionar';
-      this.dynamicTitle = 'Adicionar novo paciente';
+      // this.actionButton = 'Adicionar';
+      // this.dynamicTitle = 'Adicionar novo paciente';
     },
     closeMyModal() {
       this.selectedPatient = {};
       this.myModal = false;
     },
     editModal(t) {
+      // this.actionButton = 'Salvar';
+      // this.dynamicTitle = 'Editar novo paciente';
       this.selectedPatient = t;
       this.myModal = true;
     },
@@ -123,6 +125,7 @@ export default {
     moment() {
       return moment();
     },
+
   },
 };
 </script>
