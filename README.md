@@ -1,5 +1,5 @@
 # New Doctor App
-## Patient List
+## Patients List
 
 Para realizar seus testes desta aplicação, você pode entrar no [demo](https://luismgil.github.io/PatientsList-vue).
 
@@ -20,7 +20,7 @@ Eu criei este projeto com `vue create <nome-do-projeto>`.
 em seu desenvolvimento, usei:
 - [JavaScript](https://www.javascript.com/)
 - [Vue CLI](https://cli.vuejs.org/)
-- [Boostrap](https://getbootstrap.com/docs/5.0/getting-started/introduction/)
+- [Bootstrap](https://getbootstrap.com/docs/5.0/getting-started/introduction/)
 - [Vuelidate](https://vuelidate.js.org/)
 - [moment.js](https://momentjs.com/)
 - [fontAwsome](https://fontawesome.com/icons)
