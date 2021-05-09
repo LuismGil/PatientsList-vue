@@ -15,6 +15,7 @@ export default {
   components: {
     PatientsTable,
   },
+
   data() {
     return {
       mainTitle: 'Lista de Pacientes',

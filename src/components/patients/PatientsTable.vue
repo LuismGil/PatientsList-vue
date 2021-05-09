@@ -13,7 +13,7 @@
               class="btn btn-succes btn-add"
               @click="openModal"
             >
-              <i class="far fa-plus-square"> Adicionar Paciente"
+              <i class="far fa-plus-square"> Adicionar Paciente
               </i>
             </button>
           </th>
@@ -21,12 +21,6 @@
       </thead>
 
       <tbody>
-        <tr
-          v-show="!patients.length"
-          style="color: black"
-        >
-          Não tem pacientes cadastrados
-        </tr>
         <tr
           v-for="(t, i) in patients"
           :key="t.cpf"
@@ -63,6 +57,13 @@
         </tr>
       </tbody>
     </table>
+    <h4
+      v-show="!patients.length"
+      style="color: black"
+      class="text-center m-3"
+    >
+      Não tem pacientes cadastrados
+    </h4>
 
     <PatientsModal
       v-show="myModal"
@@ -75,17 +76,15 @@
 </template>
 
 <script>
-import moment from 'moment';
-
 import PatientsModal from './PatientsModal.vue';
 
 export default {
   name: 'PatientsTable',
   components: { PatientsModal },
+
   data() {
     return {
       patients: [],
-
       newPatient: {
         name: '',
         date: '',
@@ -104,16 +103,14 @@ export default {
   methods: {
     openModal() {
       this.myModal = true;
-      // this.actionButton = 'Adicionar';
-      // this.dynamicTitle = 'Adicionar novo paciente';
     },
+
     closeMyModal() {
       this.selectedPatient = {};
       this.myModal = false;
     },
+
     editModal(t) {
-      // this.actionButton = 'Salvar';
-      // this.dynamicTitle = 'Editar novo paciente';
       this.selectedPatient = t;
       this.myModal = true;
     },
@@ -123,10 +120,6 @@ export default {
       localStorage.setItem('patients', JSON.stringify(this.patients));
       window.location.reload();
     },
-    moment() {
-      return moment();
-    },
-
   },
 };
 </script>

@@ -18,10 +18,9 @@
                   <i class="far fa-window-close" />
                 </button>
               </div>
+
               <div class="modal-body">
-                <form
-                  class="modal-input"
-                >
+                <form class="modal-input">
                   <div class="form-group m-2">
                     <label for="name">Nome</label>
                     <input
@@ -55,6 +54,7 @@
                       A data é obrigatória
                     </div>
                   </div>
+
                   <div class="form-group m-2">
                     <label for="cpf">CPF</label>
                     <input
@@ -73,6 +73,7 @@
                       <span v-if="!$v.newPatient.cpf.minLength">O Cpf inserido não é válido</span>
                     </div>
                   </div>
+
                   <div class="form-group m-2">
                     <label for="email">E-mail</label>
                     <input
@@ -123,9 +124,7 @@
 </template>
 
 <script>
-
 import { required, email, minLength } from 'vuelidate/lib/validators';
-// import { FormatCpf } from '../helpers/FormatCpf';
 
 export default {
 
@@ -136,8 +135,8 @@ export default {
       default: () => {
       },
     },
-
   },
+
   data() {
     return {
       errors: [],
@@ -155,6 +154,7 @@ export default {
       submitted: false,
     };
   },
+
   validations: {
     newPatient: {
       name: { required },
@@ -191,6 +191,7 @@ export default {
       this.actionButton = 'Adicionar';
       this.editPatient = false;
     },
+
     updatePatient() {
       this.submitted = true;
       this.$v.$touch();
@@ -236,15 +237,10 @@ export default {
       this.newPatient.cpf = '';
       this.newPatient.email = '';
     },
-    // FmatCpf() {
-    //   return FormatCpf();
-    // },
-
   },
 };
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 .modal-mask {
   background-color: rgba(0, 0, 0, 0.5);
