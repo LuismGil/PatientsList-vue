@@ -11,49 +11,61 @@
                 </h4>
                 <button
                   type="button"
-                  class="close"
+                  class="btn"
                   @click="close"
                 >
-                  <span>x</span>
+                  <i class="far fa-window-close" />
                 </button>
               </div>
-              <div class="modal-body flex">
-                <input
-                  v-model="newPatient.name"
-                  type="text"
-                  placeholder="Nome"
-                >
+              <div class="modal-body">
+                <form class="modal-input">
+                  <input
+                    v-model="newPatient.name"
+                    type="text"
+                    placeholder="Nome"
+                    required
+                  >
 
-                <input
-                  v-model="newPatient.date"
-                  type="date"
-                  placeholder="Data de nascimento"
-                >
+                  <input
+                    v-model="newPatient.date"
+                    type="date"
+                    placeholder="Data de nascimento"
+                    required
+                  >
 
-                <input
-                  v-model="newPatient.cpf"
-                  type="text"
-                  placeholder="CPF"
-                >
+                  <input
+                    v-model="newPatient.cpf"
+                    type="text"
+                    placeholder="CPF"
+                    required
+                  >
 
-                <input
-                  v-model="newPatient.email"
-                  type="email"
-                  placeholder="E-mail"
-                >
+                  <input
+                    v-model="newPatient.email"
+                    type="email"
+                    placeholder="E-mail"
+                    required
+                  >
+                </form>
 
                 <br>
-                <div align="center">
+                <div
+                  align="center"
+                  class="modal-btn"
+                >
                   <input type="hidden">
 
                   <input
                     v-model="actionButton"
                     type="button"
-                    class="btn btn-success btn-xs"
-                    @click="selectedPatient ? updatePatient() : addPatient()"
+                    class="btn btn-success m-1"
+                    @click="addPatient"
                   >
 
-                  <button @click="cancel">
+                  <button
+                    class="btn btn-danger m-1"
+                    @click="cancel"
+                  >
                     Cancelar
                   </button>
                 </div>
@@ -76,6 +88,7 @@ export default {
   },
   data() {
     return {
+
       patients: [],
       newPatient: {
         name: '',
@@ -84,7 +97,6 @@ export default {
         email: '',
       },
       myModal: false,
-      button: true,
     };
   },
 
@@ -131,14 +143,6 @@ export default {
       this.newPatient.cpf = '';
       this.newPatient.email = '';
     },
-    updatePatient() {
-      this.patients.push({
-        name: this.newPatient.name,
-        date: this.newPatient.date,
-        cpf: this.newPatient.cpf,
-        email: this.newPatient.email,
-      });
-    },
 
     cancel() {
       this.newPatient.name = '';
@@ -170,8 +174,18 @@ export default {
   vertical-align: middle;
 }
 
-.flex {
+.modal-input {
   display: flex;
   flex-direction: column;
 }
+
+.modal-input > input {
+  padding: 10px;
+  margin: 10px;
+}
+
+.modal-btn {
+  margin-bottom: 15px;
+}
+
 </style>

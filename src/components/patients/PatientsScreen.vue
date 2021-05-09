@@ -1,6 +1,8 @@
 <template>
   <div>
-    <h3>{{ mainTitle }}</h3>
+    <h3 class="text-center m-3">
+      {{ mainTitle }}
+    </h3>
     <PatientsTable />
   </div>
 </template>
@@ -21,4 +23,8 @@ export default {
 };
 </script>
 
-<style></style>
+<style>
+body {
+  cursor: grab;
+}
+</style>

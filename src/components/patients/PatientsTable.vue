@@ -1,19 +1,21 @@
 <template>
   <div>
-    <table class="table">
-      <thead class="table-dark">
+    <table class="table text-center">
+      <thead class="table-primary">
         <tr>
           <th>Nome</th>
           <th>Data de Nascimento</th>
           <th>CPF</th>
           <th>Email</th>
           <th>
-            <input
+            <button
               type="button"
-              class="btn btn-succes btn-xs test"
-              value="+ Adicionar Paciente"
+              class="btn btn-succes btn-add"
               @click="openModal"
             >
+              <i class="far fa-plus-square"> Adicionar Paciente"
+              </i>
+            </button>
           </th>
         </tr>
       </thead>
@@ -28,17 +30,32 @@
         <tr
           v-for="(t, i) in patients"
           :key="t"
+          class="table-tr"
         >
-          <td>{{ t.name }}</td>
-          <td>{{ t.date }}</td>
-          <td>{{ t.cpf }}</td>
-          <td>{{ t.email }}</td>
+          <td class="p-td">
+            {{ t.name }}
+          </td>
+          <td class="p-td">
+            {{ t.date }}
+          </td>
+          <td class="p-td">
+            {{ t.cpf }}
+          </td>
+          <td class="p-td">
+            {{ t.email }}
+          </td>
           <td>
-            <button @click="removePatient(i)">
-              x
+            <button
+              class="btn"
+              @click="removePatient(i)"
+            >
+              <i class="far fa-trash-alt" />
             </button>
-            <button @click="editModal(t)">
-              Editar
+            <button
+              class="btn"
+              @click="editModal(t)"
+            >
+              <i class="far fa-edit"> Editar</i>
             </button>
           </td>
         </tr>
@@ -56,6 +73,7 @@
 </template>
 
 <script>
+import moment from 'moment';
 import PatientsModal from './PatientsModal.vue';
 
 export default {
@@ -102,12 +120,23 @@ export default {
       this.patients.splice(index, 1);
       localStorage.setItem('patients', JSON.stringify(this.patients));
     },
+    moment() {
+      return moment();
+    },
   },
 };
 </script>
 
 <style>
-.test {
-  color: #fff;
+.btn-add {
+  padding:0;
+}
+
+.p-td {
+  padding-top: 16px !important;
+}
+
+.table-tr:hover {
+  background-color: rgb(236, 236, 252);
 }
 </style>
