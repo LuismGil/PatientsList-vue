@@ -64,13 +64,21 @@
                       class="form-control"
                       type="text"
                       :class="{ 'is-invalid': submitted && $v.newPatient.cpf.$error }"
+                      @change="onChangeEvent"
                     >
                     <div
                       v-if="submitted && $v.newPatient.cpf.$error"
                       class="invalid-feedback"
                     >
-                      <span v-if="!$v.newPatient.cpf.required">O Cpf é obrigatório</span>
-                      <span v-if="!$v.newPatient.cpf.minLength">O Cpf inserido não é válido</span>
+                      <p v-if="!$v.newPatient.cpf.required">
+                        O Cpf é obrigatório
+                      </p>
+                      <p v-if="!$v.newPatient.cpf.validateCpf">
+                        O Cpf inserido não é válido
+                      </p>
+                      <p v-if="!$v.newPatient.cpf.notCpf">
+                        O Cpf inserido já existe
+                      </p>
                     </div>
                   </div>
 
@@ -87,8 +95,15 @@
                       v-if="submitted && $v.newPatient.email.$error"
                       class="invalid-feedback"
                     >
-                      <span v-if="!$v.newPatient.email.required">O Email é obrigatório</span>
-                      <span v-if="!$v.newPatient.email.email">O Email é inválido</span>
+                      <p v-if="!$v.newPatient.email.required">
+                        O Email é obrigatório
+                      </p>
+                      <p v-if="!$v.newPatient.email.email">
+                        O Email é inválido
+                      </p>
+                      <p v-if="!$v.newPatient.email.notEmail">
+                        Um usuario com esse Email já existe
+                      </p>
                     </div>
                   </div>
                 </form>
@@ -124,7 +139,9 @@
 </template>
 
 <script>
-import { required, email, minLength } from 'vuelidate/lib/validators';
+import { required, email } from 'vuelidate/lib/validators';
+import { notCpf, notEmail, validateCPF } from '../helpers/validators';
+import { formatCpf } from '../helpers/formatCpf';
 
 export default {
 
@@ -139,7 +156,6 @@ export default {
 
   data() {
     return {
-      errors: [],
 
       patients: [],
       newPatient: {
@@ -159,8 +175,12 @@ export default {
     newPatient: {
       name: { required },
       date: { required },
-      cpf: { required, minLength: minLength(11) },
-      email: { required, email },
+      cpf: {
+        required,
+        notCpf,
+        validateCPF,
+      },
+      email: { required, email, notEmail },
     },
   },
 
@@ -192,10 +212,19 @@ export default {
       this.editPatient = false;
     },
 
+    onChangeEvent({ target }) {
+      formatCpf(target.value);
+    },
+
     updatePatient() {
       this.submitted = true;
       this.$v.$touch();
-      if (this.$v.$invalid) {
+
+      if (
+        this.$v.newPatient.$pending
+         || this.$v.newPatient.$error
+          || this.$v.newPatient.$invalid
+      ) {
         return;
       }
 
