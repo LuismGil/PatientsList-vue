@@ -5,6 +5,8 @@ Para realizar seus testes desta aplicação, você pode entrar no [demo](https:/
 
 É um sistema bem simples onde um médico pode acompanhar seus pacientes (adicionando novos pacientes, modificando pacientes existentes e eliminando pacientes inativos).
 
+**Observação:** O campo 'CPF' e o campo 'E-mail' deverão ser unicos, não podendo alterar novamente. Se o Doctor precisar realizar uma excepção e alterar a informação em um desses campos deverá apagar o registro do paciente e adicionarlo novamente com os novos valores.
+
 No momento os dados do paciente inseridos são armazenados no [Local Storage](https://developer.mozilla.org/pt-BR/docs/Web/API/Window/localStorage) de seu navegador, ou seja, se você os abrir de outro computador, não terá mais as mesmas informações.
 
 ## Instruções para sua instalação local

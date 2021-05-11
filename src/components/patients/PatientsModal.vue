@@ -4,7 +4,7 @@
       <div class="modal-mask">
         <div class="modal-wrapper">
           <div class="modal-dialog">
-            <div class="modal-content">
+            <div class="modal-content modal-content_height">
               <div class="modal-header">
                 <h4 class="modal-title">
                   {{ dynamicTitle }}
@@ -19,7 +19,7 @@
                 </button>
               </div>
 
-              <div class="modal-body">
+              <div class="modal-body modal-body_overflow">
                 <form class="modal-input">
                   <div class="form-group m-2">
                     <label for="name">Nome</label>
@@ -55,55 +55,92 @@
                     </div>
                   </div>
 
-                  <div class="form-group m-2">
-                    <label for="cpf">CPF</label>
-                    <input
-                      id="cpf-id"
-                      v-model="newPatient.cpf"
-                      name="cpf"
-                      class="form-control"
-                      type="text"
-                      :class="{ 'is-invalid': submitted && $v.newPatient.cpf.$error }"
-                      @change="onChangeEvent"
-                    >
+                  <div>
                     <div
-                      v-if="submitted && $v.newPatient.cpf.$error"
-                      class="invalid-feedback"
+                      v-if="editPatient"
+                      class="form-group m-2"
                     >
-                      <p v-if="!$v.newPatient.cpf.required">
-                        O Cpf é obrigatório
-                      </p>
-                      <p v-if="!$v.newPatient.cpf.validateCpf">
-                        O Cpf inserido não é válido
-                      </p>
-                      <p v-if="!$v.newPatient.cpf.notCpf">
-                        O Cpf inserido já existe
-                      </p>
+                      <label for="cpfNotEdit">CPF</label>
+                      <input
+                        v-model="newPatient.cpf"
+                        name="cpfNotEdit"
+                        class="form-control"
+                        type="text"
+                        :disabled="editPatient"
+                      >
+                    </div>
+                    <div
+                      v-else
+                      class="form-group m-2"
+                    >
+                      <label for="cpf">CPF</label>
+                      <input
+                        id="cpf-id"
+                        v-model="newPatient.cpf"
+                        maxlength="14"
+                        name="cpf"
+                        class="form-control"
+                        type="text"
+                        :class="{ 'is-invalid': submitted && $v.newPatient.cpf.$error }"
+                        @change="onChangeEvent"
+                      >
+                      <div
+                        v-if="submitted && $v.newPatient.cpf.$error"
+                        class="invalid-feedback"
+                      >
+                        <p v-if="!$v.newPatient.cpf.required">
+                          O Cpf é obrigatório
+                        </p>
+                        <p v-if="!$v.newPatient.cpf.validateCpf">
+                          O Cpf inserido não é válido
+                        </p>
+                        <p v-if="!$v.newPatient.cpf.notCpf">
+                          O Cpf inserido já existe
+                        </p>
+                      </div>
                     </div>
                   </div>
 
-                  <div class="form-group m-2">
-                    <label for="email">E-mail</label>
-                    <input
-                      v-model="newPatient.email"
-                      name="email"
-                      class="form-control"
-                      type="email"
-                      :class="{ 'is-invalid': submitted && $v.newPatient.email.$error }"
-                    >
+                  <div>
                     <div
-                      v-if="submitted && $v.newPatient.email.$error"
-                      class="invalid-feedback"
+                      v-if="editPatient"
+                      class="form-group m-2"
                     >
-                      <p v-if="!$v.newPatient.email.required">
-                        O Email é obrigatório
-                      </p>
-                      <p v-if="!$v.newPatient.email.email">
-                        O Email é inválido
-                      </p>
-                      <p v-if="!$v.newPatient.email.notEmail">
-                        Um usuario com esse Email já existe
-                      </p>
+                      <label for="emailNotEdit">E-mail</label>
+                      <input
+                        v-model="newPatient.email"
+                        name="emailNotEdit"
+                        class="form-control"
+                        type="email"
+                        :disabled="editPatient"
+                      >
+                    </div>
+                    <div
+                      v-else
+                      class="form-group m-2"
+                    >
+                      <label for="email">E-mail</label>
+                      <input
+                        v-model="newPatient.email"
+                        name="email"
+                        class="form-control"
+                        type="email"
+                        :class="{ 'is-invalid': submitted && $v.newPatient.email.$error }"
+                      >
+                      <div
+                        v-if="submitted && $v.newPatient.email.$error"
+                        class="invalid-feedback"
+                      >
+                        <p v-if="!$v.newPatient.email.required">
+                          O Email é obrigatório
+                        </p>
+                        <p v-if="!$v.newPatient.email.email">
+                          O Email é inválido
+                        </p>
+                        <p v-if="!$v.newPatient.email.notEmail">
+                          Um usuario com esse Email já existe
+                        </p>
+                      </div>
                     </div>
                   </div>
                 </form>
@@ -221,9 +258,11 @@ export default {
       this.$v.$touch();
 
       if (
-        this.$v.newPatient.$pending
-         || this.$v.newPatient.$error
+        (
+          this.$v.newPatient.$pending
+          || this.$v.newPatient.$error
           || this.$v.newPatient.$invalid
+        ) && !this.editPatient
       ) {
         return;
       }
@@ -251,8 +290,6 @@ export default {
 
         this.patients[patientIndex].name = this.newPatient.name;
         this.patients[patientIndex].date = this.newPatient.date;
-        this.patients[patientIndex].cpf = this.newPatient.cpf;
-        this.patients[patientIndex].email = this.newPatient.email;
 
         localStorage.setItem('patients', JSON.stringify(this.patients));
 
@@ -288,6 +325,14 @@ export default {
   vertical-align: middle;
 }
 
+.modal-body_overflow {
+  overflow-y: auto !important;
+}
+
+.modal-content_height {
+  height: 90vh !important;
+}
+
 .modal-input {
   display: flex;
   flex-direction: column;
@@ -300,6 +345,7 @@ export default {
 
 .modal-btn {
   margin-bottom: 15px;
+  margin-top: 30px;
 }
 
 div > label {
