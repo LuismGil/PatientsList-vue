@@ -5,20 +5,30 @@
 // eslint-disable-next-line import/prefer-default-export
 export const notCpf = (value) => {
   const patients = JSON.parse(localStorage.getItem('patients'));
-  const cpfValidation = patients.findIndex((
-    (patient) => patient.cpf === value
-  ));
 
-  return !patients[cpfValidation];
+  if (patients) {
+    const cpfValidation = patients.findIndex((
+      (patient) => patient.cpf === value
+    ));
+
+    return !patients[cpfValidation];
+  }
+
+  return true;
 };
 
 export const notEmail = (value) => {
   const patients = JSON.parse(localStorage.getItem('patients'));
-  const emailValidation = patients.findIndex((
-    (patient) => patient.email === value
-  ));
 
-  return !patients[emailValidation];
+  if (patients) {
+    const emailValidation = patients.findIndex((
+      (patient) => patient.email === value
+    ));
+
+    return !patients[emailValidation];
+  }
+
+  return true;
 };
 
 /*
